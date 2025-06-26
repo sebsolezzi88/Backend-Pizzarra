@@ -2,6 +2,7 @@ import User from './User.js';
 import Post from './Post.js';
 import Like from './Like.js';
 import Follower from './Follower.js';
+import Comment from './Comment.js';
 
 //Relacions de Tablas
 
