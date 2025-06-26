@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
+import postRoutes from './routes/postRoutes.js';
 /* import sequelize from './config/database.js';
 import './models/Comment.js';
 import './models/Follower.js';
@@ -38,6 +39,7 @@ const start = async () => {
 
 //Rutas de la API
 app.use('/api/user',authRoutes);
+app.use('/api/post',postRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Server Express corriendo en puerto ${PORT}`);
