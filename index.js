@@ -43,5 +43,6 @@ app.listen(PORT, ()=>{
     console.log(`Server Express corriendo en puerto ${PORT}`);
 })
 
+export default app;
 
 

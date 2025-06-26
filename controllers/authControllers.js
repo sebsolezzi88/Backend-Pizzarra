@@ -11,7 +11,7 @@ export const registerUser = async (req,res) => {
         return res.status(400).json({status:'error', message:'username required'});
       }
 
-      if(username.length < 6 && password.length < 6){
+      if(username.length < 6 || password.length < 6){
         return res.status(400).json({status:'error', message:'user name or password must have at least 6 characters'});
       }
 
