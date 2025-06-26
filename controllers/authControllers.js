@@ -1,6 +1,12 @@
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+import  jwt  from 'jsonwebtoken';
 import User from '../models/User.js';
 
+
+//obtemos la palabra secreta de las variable de entorno
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const registerUser = async (req,res) => {
     try {
@@ -42,4 +48,36 @@ export const registerUser = async (req,res) => {
         console.log(error);
         return res.status(500).json({status:'error', message: 'internal server error'});
     }
+}
+
+export const loginUser = async (req,res) =>{
+    try {
+        
+        const {username,password} = req.body;
+
+        if(username === '' || password === ''){
+          return res.status(400).json({status:'error', message:'username or password required'});
+        }
+
+        const userExists = await User.findOne({where:{username}});
+    
+        if(!userExists){
+          return res.status(400).json({status:'error', message:'username not found'});
+        }
+        
+        if(!await bcrypt.compare(password,userExists.password)){
+          return res.status(400).json({status:'error', message:'invalid credentials'});
+        }
+        //Si los password coincide generamos el token
+        const payload = {
+          id: userExists.id,
+          username: userExists.username
+        }
+        
+        const token = jwt.sign(payload,JWT_SECRET,{ expiresIn: '12h' } ); 
+        return res.status(201).json({status:'success', token})
+    
+      } catch (error) {
+         return res.status(500).json({status:'error', message:'internal server error'});
+      }
 }
