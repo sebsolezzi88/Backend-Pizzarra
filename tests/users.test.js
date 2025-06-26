@@ -92,3 +92,71 @@ describe('POST /api/user/register', () => {
 
 });
 
+describe('POST /api/user/login', () => {
+  it('debería fallar si el usuario no esta registrado', async () => {
+   
+    const user = {
+      username: 'unUsuarioNuevo',
+      password: 'abcdef',
+    };
+
+    const res = await request(app)
+      .post('/api/user/login')
+      .send(user);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toBe('error');
+    expect(res.body.message).toBe('username not found');
+  }); 
+
+  it('debería fallar si no se envias username o password', async () => {
+   
+    const user = {
+      username: 'unUsuarioNuevo',
+      password: '',
+    };
+
+    const res = await request(app)
+      .post('/api/user/login')
+      .send(user);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toBe('error');
+    expect(res.body.message).toBe('username or password required');
+  }); 
+
+  it('debería fallar si el usuario esta registrado pero el password es incorrecto', async () => {
+   
+    const user = {
+      username: 'marcelaUser',
+      password: 'unnuevopassword',
+    };
+
+    const res = await request(app)
+      .post('/api/user/login')
+      .send(user);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toBe('error');
+    expect(res.body.message).toBe('invalid credentials');
+  }); 
+  
+  it('debería regresar el token si el usuario existe y el password es correcto', async () => {
+   
+    const user = {
+      username: 'marcelaUser',
+      password: '123456',
+    };
+
+    const res = await request(app)
+      .post('/api/user/login')
+      .send(user);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('success');
+    expect(res.body).toHaveProperty('token'); //esperar que haya una propiedad token
+
+    // Validar que parezca un JWT (tres partes separadas por puntos)
+    expect(res.body.token).toMatch(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/);
+  }); 
+});

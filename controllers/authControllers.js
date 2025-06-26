@@ -75,7 +75,7 @@ export const loginUser = async (req,res) =>{
         }
         
         const token = jwt.sign(payload,JWT_SECRET,{ expiresIn: '12h' } ); 
-        return res.status(201).json({status:'success', token})
+        return res.status(200).json({status:'success', token})
     
       } catch (error) {
          return res.status(500).json({status:'error', message:'internal server error'});
