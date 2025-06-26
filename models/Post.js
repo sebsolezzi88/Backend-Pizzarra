@@ -1,32 +1,31 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
-class User extends Model {}
+class Post extends Model {}
 
-User.init(
+Post.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
-      type: DataTypes.STRING(50),
+    user_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
     },
-    password: {
-      type: DataTypes.STRING(255),
+    content: {
+      type: DataTypes.TEXT,
       allowNull: false,
     },
    
   },
   {
     sequelize,
-    modelName: "User",
-    tableName: "users",
+    modelName: "Post",
+    tableName: "posts",
     timestamps: true, 
   }
 );
 
-export default User;
+export default Post;
