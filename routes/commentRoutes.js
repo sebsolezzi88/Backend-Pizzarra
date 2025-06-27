@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 import { createComment, deleteComment, getCommentsByPost, updateComment } from "../controllers/commentControllers.js";
 
 
