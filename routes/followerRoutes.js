@@ -15,4 +15,10 @@ router.get('/:id/followings', getFollowings);
 // Obtener los seguidores de un usuario
 router.get('/:id/followers', getFollowers);
 
+// Obtener seguidores por username
+router.get('/username/:username/followers', getFollowersByUsername);
+
+// Obtener seguidos por username
+router.get('/username/:username/followings', getFollowingsByUsername);
+
 export default router;
