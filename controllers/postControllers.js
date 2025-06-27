@@ -23,6 +23,30 @@ export const  updatePost = async (req ,res) =>{
 }
 export const  deletePost = async (req ,res) =>{
     
+    try {
+        const id = req.params.id;
+        const id_user = req.user.id;
+
+        // Validar que el ID exista y sea un número válido
+        if (!id || isNaN(Number(id))) {
+            return res.status(400).json({ status: 'error', message: 'invalid or missing post id' });
+        }
+        
+        //buscar el post
+        const postExists = await Post.findOne({where:{id,id_user}});
+        
+        if (!postExists) {
+            return res.status(404).json({status:'error', message:'post not found'});
+        }
+        
+        // Eliminar el post
+        await postExists.destroy();
+
+        return res.status(200).json({ status:'success', message: 'successfully deleted post' });
+        
+    } catch (error) {
+        return res.status(500).json({status:'error', message:'internal server error', err:error});
+    }
 }
 
 export const  getAllUserPost = async (req ,res) =>{
