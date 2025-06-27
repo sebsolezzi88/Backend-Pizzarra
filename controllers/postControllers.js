@@ -30,5 +30,10 @@ export const  getAllUserPost = async (req ,res) =>{
 }
 
 export const  getAllPost = async (req ,res) =>{
-    
+    try {
+        const posts = await Post.findAll();
+        return res.status(200).json({status:'success', message:'posts obtained',posts});
+    } catch (error) {
+        return res.status(500).json({status:'error', message:'internal server error',error});
+    }
 }

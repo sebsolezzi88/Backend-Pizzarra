@@ -1,6 +1,19 @@
 import request from 'supertest';
 import app from '../index.js'
 
+describe('GET /api/post', () =>{
+    
+    it("debería traer todos los post de la base de datos", async ()=>{
+        const res = await request(app)
+            .get('/api/post');
+            expect(res.statusCode).toBe(200);
+            expect(res.body.status).toBe('success');
+            expect(res.body.message).toBe('posts obtained');
+            expect(Array.isArray(res.body.posts)).toBe(true);
+            expect(res.body.posts.length).toBeGreaterThan(0);
+    });
+});
+
 describe('POST /api/post', () => {
   
     it('debería fallar si no se envía token en una ruta protegida', async () => {
@@ -13,7 +26,7 @@ describe('POST /api/post', () => {
         expect(res.body.message).toBe('token not provided');
     });
 
- 
+
   /* it('debería agregar un Post con token válido', async () => {
     const newContent = {
       content: 'Estoy aprendiendo a programar',
