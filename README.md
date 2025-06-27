@@ -5,7 +5,7 @@
 ## Tecnologías
 
 **Node.js**
-Entorno de ejecución para JavaScript en el servidor. Permite construir aplicaciones backend rápidas y escalables.
+
 **Express**
 
 **Sequelize ORM + MySQL**
