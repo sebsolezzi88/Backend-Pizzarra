@@ -8,7 +8,7 @@ import './models/Follower.js';
 import './models/Like.js';
 import './models/Post.js';
 import './models/User.js';
-import './models/index.js'; */
+import './models/index.js';   */
 
 
 //Cargar variable de entorno

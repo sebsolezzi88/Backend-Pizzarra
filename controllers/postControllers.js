@@ -25,7 +25,7 @@ export const  deletePost = async (req ,res) =>{
     
     try {
         const id = req.params.id;
-        const id_user = req.user.id;
+        const user_id = req.user.id;
 
         // Validar que el ID exista y sea un número válido
         if (!id || isNaN(Number(id))) {
@@ -33,7 +33,7 @@ export const  deletePost = async (req ,res) =>{
         }
         
         //buscar el post
-        const postExists = await Post.findOne({where:{id,id_user}});
+        const postExists = await Post.findOne({where:{id,user_id}});
         
         if (!postExists) {
             return res.status(404).json({status:'error', message:'post not found'});
