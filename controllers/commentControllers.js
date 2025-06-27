@@ -1,5 +1,6 @@
 import Comment from '../models/Comment.js';
 import Post from '../models/Post.js';
+import User from '../models/User.js';
 
 export const createComment = async (req , res) =>{
     try {
@@ -104,6 +105,28 @@ export const deleteComment = async (req , res) =>{
     }
 }
 
-export const getCommentsByPost = async (req , res) =>{
-    
-}
+export const getCommentsByPost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+
+    if (!postId || isNaN(postId)) {
+      return res.status(400).json({status: 'error',message: 'post ID is required and must be a valid number'});
+    }
+
+    const comments = await Comment.findAll({
+      where: { post_id: postId },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'username']
+        },
+      ],
+      order: [['createdAt', 'ASC']], 
+    });
+
+    return res.status(200).json({status: 'success',message: 'comments retrieved successfully',comments});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({status: 'error',message: 'internal server error',error});
+  }
+};
