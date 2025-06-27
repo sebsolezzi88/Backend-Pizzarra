@@ -14,6 +14,19 @@ describe('GET /api/post', () =>{
     });
 });
 
+describe('DELETE /api/post', () =>{
+    
+    it('debería fallar si no se envía token en una ruta protegida', async () => {
+    const res = await request(app)
+        .delete('/api/post') 
+        .send({ content: 'Post sin token' }); 
+
+        expect(res.statusCode).toBe(401); 
+        expect(res.body.status).toBe('error');
+        expect(res.body.message).toBe('token not provided');
+    });
+});
+
 describe('POST /api/post', () => {
   
     it('debería fallar si no se envía token en una ruta protegida', async () => {
