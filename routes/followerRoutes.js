@@ -21,4 +21,10 @@ router.get('/username/:username/followers', getFollowersByUsername);
 // Obtener seguidos por username
 router.get('/username/:username/followings', getFollowingsByUsername);
 
+// Seguir a un usuario por username
+router.post('/username/:username/follow', verifyToken, followUserByUsername);
+
+// Dejar de seguir a un usuario por username
+router.delete('/username/:username/unfollow', verifyToken, unfollowUserByUsername);
+
 export default router;

@@ -125,3 +125,65 @@ export const getFollowingsByUsername = async (req, res) => {
     return res.status(500).json({ status: 'error', message: 'Internal server error', error });
   }
 };
+
+export const followUserByUsername = async (req, res) => {
+  try {
+    const targetUsername = req.params.username;
+    const followerId = req.user.id;
+
+    const targetUser = await User.findOne({ where: { username: targetUsername } });
+
+    if (!targetUser) {
+      return res.status(404).json({ status: 'error', message: 'User not found' });
+    }
+
+    if (targetUser.id === followerId) {
+      return res.status(400).json({ status: 'error', message: 'You cannot follow yourself' });
+    }
+
+    // Evitar seguir dos veces
+    const alreadyFollowing = await Follower.findOne({
+      where: { follower_id: followerId, following_id: targetUser.id },
+    });
+
+    if (alreadyFollowing) {
+      return res.status(400).json({ status: 'error', message: 'You are already following this user' });
+    }
+
+    await Follower.create({ follower_id: followerId, following_id: targetUser.id });
+
+    return res.status(200).json({ status: 'success', message: `You are now following ${targetUsername}` });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 'error', message: 'Internal server error', error });
+  }
+}
+export const unfollowUserByUsername = async (req, res) => {
+  try {
+    const targetUsername = req.params.username;
+    const followerId = req.user.id;
+
+    const targetUser = await User.findOne({ where: { username: targetUsername } });
+
+    if (!targetUser) {
+      return res.status(404).json({ status: 'error', message: 'User not found' });
+    }
+
+    const follow = await Follower.findOne({
+      where: { follower_id: followerId, following_id: targetUser.id },
+    });
+
+    if (!follow) {
+      return res.status(400).json({ status: 'error', message: 'You are not following this user' });
+    }
+
+    await Follower.destroy({
+      where: { follower_id: followerId, following_id: targetUser.id },
+    });
+
+    return res.status(200).json({ status: 'success', message: `You have unfollowed ${targetUsername}` });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 'error', message: 'Internal server error', error });
+  }
+};
