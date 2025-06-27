@@ -50,3 +50,4 @@ User.belongsToMany(User, {
   foreignKey: "following_id",
   otherKey: "follower_id",
 });
+export { User, Post, Comment };
