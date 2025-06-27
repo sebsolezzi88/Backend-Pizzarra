@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import commentRoutes from './routes/commentRoutes.js';
+import followerRoutes from './routes/followerRoutes.js';
 /* import sequelize from './config/database.js';
 import './models/Comment.js';
 import './models/Follower.js';
@@ -42,6 +43,7 @@ const start = async () => {
 app.use('/api/user',authRoutes);
 app.use('/api/post',postRoutes);
 app.use('/api/comment',commentRoutes);
+app.use('/api/follower',followerRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Server Express corriendo en puerto ${PORT}`);
