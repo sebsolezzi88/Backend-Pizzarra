@@ -1,4 +1,5 @@
 import Post from '../models/Post.js';
+import User from '../models/User.js';
 
 export const  createPost = async (req ,res) =>{
     try {
@@ -49,9 +50,69 @@ export const  deletePost = async (req ,res) =>{
     }
 }
 
-export const  getAllUserPost = async (req ,res) =>{
-    
+export const  getPostsByUsername = async (req ,res) =>{
+   const { username } = req.params;
+
+  try {
+    // Buscar al usuario por nombre
+    const user = await User.findOne({ where: { username } });
+
+    if (!user) {
+      return res.status(404).json({ status: 'error', message: 'user not found' });
+    }
+
+    // Traer los posts por user_id
+    const posts = await Post.findAll({
+      where: { user_id: user.id },
+      order: [['createdAt', 'DESC']],
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'posts obtained',
+      posts,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'internal server error',
+      error,
+    });
+  }
 }
+
+export const getPostsByUserId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Comprobamos si existe el usuario
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ status: 'error', message: 'user not found' });
+    }
+
+    // Buscamos todos los posts de ese usuario
+    const posts = await Post.findAll({
+      where: { user_id: id },
+      order: [['createdAt', 'DESC']],
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'posts obtained',
+      posts,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'internal server error',
+      error,
+    });
+  }
+}
+
 
 export const  getAllPost = async (req ,res) =>{
     try {
