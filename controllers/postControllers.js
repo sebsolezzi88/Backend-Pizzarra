@@ -1,3 +1,4 @@
+import Like from '../models/Like.js';
 import Post from '../models/Post.js';
 import User from '../models/User.js';
 
@@ -151,4 +152,69 @@ export const  getAllPost = async (req ,res) =>{
     } catch (error) {
         return res.status(500).json({status:'error', message:'internal server error',error});
     }
+}
+
+export const likePost = async (req, res) => {
+  try {
+    const post_id = req.params.id;
+    const user_id = req.user.id;
+
+    // Verificar si el like ya existe
+    const existingLike = await Like.findOne({
+      where: { post_id, user_id }
+    });
+
+    if (existingLike) {
+      return res.status(400).json({ status: 'error', message: 'You already liked this post.' });
+    }
+
+    // Crear el like
+    const like = await Like.create({ post_id, user_id });
+
+    return res.status(201).json({ status: 'success', message: 'Post liked.', like });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 'error', message: 'Internal server error', error });
+  }
+}
+
+export const unlikePost = async (req, res) => {
+  try {
+    const post_id = req.params.id;
+    const user_id = req.user.id;
+
+    const like = await Like.findOne({
+      where: { post_id, user_id }
+    });
+
+    if (!like) {
+      return res.status(404).json({ status: 'error', message: 'Like not found.' });
+    }
+
+    await like.destroy();
+
+    return res.status(200).json({ status: 'success', message: 'Like removed.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 'error', message: 'Internal server error', error });
+  }
+}
+
+export const getPostLikes = async (req, res) => {
+  try {
+    const post_id = req.params.id;
+
+    const likes = await Like.findAll({
+      where: { post_id },
+      include: {
+        model: User,
+        attributes: ['id', 'username'] // Mostramos solo lo necesario
+      }
+    });
+
+    return res.status(200).json({ status: 'success', count: likes.length, likes });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 'error', message: 'Internal server error', error });
+  }
 }

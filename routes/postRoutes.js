@@ -12,5 +12,10 @@ router.post('/',verifyToken,createPost);
 router.put('/:id',verifyToken,updatePost);
 router.delete('/:id',verifyToken,deletePost);
 
+// ---------- Likes ----------
+router.post('/:id/like', verifyToken, likePost);
+router.delete('/:id/unlike', verifyToken, unlikePost);
+router.get('/:id/likes', getPostLikes); 
+
 
 export default router;
