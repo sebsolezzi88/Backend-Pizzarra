@@ -24,7 +24,7 @@ export const verifyToken = async (req,res,next) => {
         //verificar si el usuario esta en la base de datos
         const userExists = await User.findOne({where:{id:decoded.id, username: decoded.username}});
         if(!userExists){
-            return res.status(401).json({ status: 'error', message: 'invalid user' });
+            return res.status(403).json({ status: 'error', message: 'invalid user' });
         }
         //si el usuario existe lo agregamos al request y demjamos seguir
         req.user ={
