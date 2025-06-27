@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import  jwt  from 'jsonwebtoken';
-import User from '../models/User';
+import User from '../models/User.js';
 
 //obtemos la palabra secreta de las variable de entorno
 dotenv.config();
@@ -8,7 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export const verifyToken = async (req,res,next) => {
     
-     /* 1.Obtener el token de los headers de la solicitud 
+     /* Obtener el token de los headers de la solicitud 
         Comúnmente viene en el header 'Authorization' con el prefijo 'Bearer '
     */
     const authHeader = req.headers['authorization'];
