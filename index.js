@@ -4,6 +4,7 @@ import authRoutes from './routes/authRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import commentRoutes from './routes/commentRoutes.js';
 import followerRoutes from './routes/followerRoutes.js';
+import cors from 'cors';
 /* import sequelize from './config/database.js';
 import './models/Comment.js';
 import './models/Follower.js';
@@ -20,7 +21,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(express.json()); //Para leer los json
-
+app.use(cors());
 //Sincronizar tablas DB;
 const start = async () => {
   try {
