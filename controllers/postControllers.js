@@ -148,7 +148,13 @@ export const getPostsByUserId = async (req, res) => {
 
 export const  getAllPost = async (req ,res) =>{
     try {
-        const posts = await Post.findAll({ order: [['createdAt', 'DESC']]});
+        const posts = await Post.findAll({ 
+          order: [['createdAt', 'DESC']],
+          include: {
+            model: User,
+            attributes: ['username'] 
+      }
+        });
         return res.status(200).json({status:'success', message:'posts obtained',posts});
     } catch (error) {
         return res.status(500).json({status:'error', message:'internal server error',error});
