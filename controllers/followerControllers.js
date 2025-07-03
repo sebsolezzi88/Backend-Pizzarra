@@ -1,5 +1,20 @@
 import {Like,User,Post,Follower} from '../models/index.js'
 
+
+export const getUserByUsername = async (req,res)=>{
+  try {
+    const userName = req.params.username;
+    const userExists = await User.findOne({where:{userName}});
+    
+    if(!userExists){
+      return res.status(404).json({ status: 'error', message: 'User not Found' });
+    }
+    return res.status(400).json({ status: 'success', user: userExists.username});
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+}
+
 export const followUser = async (req, res) => {
   try {
     const follower_id = req.user.id;

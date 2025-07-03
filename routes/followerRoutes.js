@@ -4,6 +4,9 @@ import { followUser, followUserByUsername, getFollowers, getFollowersByUsername,
 
 const router = Router();
 
+//buscar un usuario por su username
+router.get('/username/:username', getUserByUsername);
+
 // Seguir a un usuario
 router.post('/:id/follow', verifyToken, followUser);
 
