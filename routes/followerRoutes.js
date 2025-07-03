@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/authMiddleware.js";
-import { followUser, followUserByUsername, getFollowers, getFollowersByUsername, getFollowings, getFollowingsByUsername, unfollowUser, unfollowUserByUsername } from '../controllers/followerControllers.js'
+import { followUser, followUserByUsername, getFollowers, getFollowersByUsername, getFollowings, getFollowingsByUsername, getUserByUsername, unfollowUser, unfollowUserByUsername } from '../controllers/followerControllers.js'
 
 const router = Router();
 
