@@ -32,7 +32,14 @@ export const verifyToken = async (req,res,next) => {
             username: userExists.username
         }
         next() //Continua la consulta 
+        
     } catch (error) {
-         return res.status(500).json({status:'error', message:'internal server error',error});
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ status: 'error', message: 'token expired' });
+        }
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ status: 'error', message: 'invalid token' });
+        }
+        return res.status(500).json({status:'error', message:'internal server error',error});
     }
 }
