@@ -106,7 +106,7 @@ export const deleteComment = async (req , res) =>{
     }
 }
 
-export const getCommentsByPost = async (req, res) => {
+/* export const getCommentsByPost = async (req, res) => {
   try {
     const postId = req.params.postId;
 
@@ -130,4 +130,58 @@ export const getCommentsByPost = async (req, res) => {
     console.error(error);
     return res.status(500).json({status: 'error',message: 'internal server error',error});
   }
-};
+}; */
+
+export const getCommentsByPost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+
+    if (!postId || isNaN(postId)) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'post ID is required and must be a valid number',
+      });
+    }
+
+    // Buscar el post
+    const post = await Post.findByPk(postId, {
+      include: {
+        model: User,
+        attributes: ['id', 'username']
+      }
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Post not found',
+      });
+    }
+
+    // Buscar los comentarios relacionados
+    const comments = await Comment.findAll({
+      where: { post_id: postId },
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+        },
+      ],
+      order: [['createdAt', 'ASC']],
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Post and comments retrieved successfully',
+      post,
+      comments,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'internal server error',
+      error,
+    });
+  }
+}
