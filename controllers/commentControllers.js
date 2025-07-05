@@ -167,7 +167,7 @@ export const getCommentsByPost = async (req, res) => {
           attributes: ['username'],
         },
       ],
-      order: [['createdAt', 'ASC']],
+      order: [['createdAt', 'DESC']],
     });
 
     return res.status(200).json({
